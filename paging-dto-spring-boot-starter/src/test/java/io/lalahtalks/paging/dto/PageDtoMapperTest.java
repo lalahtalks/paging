@@ -1,11 +1,8 @@
-package io.lalahtalks.paging.infra.dto;
+package io.lalahtalks.paging.dto;
 
 import io.lalahtalks.paging.domain.Page;
 import io.lalahtalks.paging.domain.Paging;
 import io.lalahtalks.paging.domain.Sort;
-import io.lalahtalks.paging.dto.PageDto;
-import io.lalahtalks.paging.dto.PagingDto;
-import io.lalahtalks.paging.dto.SortDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

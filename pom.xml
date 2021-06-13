@@ -15,9 +15,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>paging-dto</module>
         <module>paging-domain</module>
-        <module>paging-infra-dto</module>
+        <module>paging-dto</module>
+        <module>paging-dto-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
