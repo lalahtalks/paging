@@ -3,26 +3,20 @@ package io.lalahtalks.paging.dto;
 import io.lalahtalks.paging.domain.Page;
 import io.lalahtalks.paging.domain.Paging;
 import io.lalahtalks.paging.domain.Sort;
-import io.lalahtalks.paging.dto.PageDto;
-import io.lalahtalks.paging.dto.PagingDto;
-import io.lalahtalks.paging.dto.SortDto;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class PageDtoMapper {
 
-    public <T, U> Page<T> fromDto(PageDto<U> dto, Function<U, T> mapping) {
-        var paging = fromDto(dto.getPaging());
-        var elements = dto.getElements()
+    public <T, U> Page<T> from(PageDto<U> dto, Function<U, T> mapping) {
+        var paging = from(dto.paging());
+        var elements = dto.elements()
                 .stream()
                 .map(mapping)
-                .collect(Collectors.toList());
-        var sort = dto.getSort() != null
-                ? fromDto(dto.getSort())
-                : null;
+                .toList();
+        var sort = from(dto.sort());
         return Page.<T>builder()
                 .paging(paging)
                 .elements(elements)
@@ -30,74 +24,69 @@ public class PageDtoMapper {
                 .build();
     }
 
-    private Paging fromDto(PagingDto dto) {
+    private Paging from(PagingDto dto) {
         return Paging.builder()
-                .number(dto.getNumber())
-                .size(dto.getSize())
-                .totalElements(dto.getTotalElements())
-                .totalPages(dto.getTotalPages())
+                .number(dto.number())
+                .size(dto.size())
+                .totalElements(dto.totalElements())
+                .totalPages(dto.totalPages())
                 .build();
     }
 
-    private Sort fromDto(SortDto dto) {
-        var orders = dto.getOrders()
+    private Sort from(SortDto dto) {
+        var orders = dto.orders()
                 .stream()
-                .map(this::fromDto)
-                .collect(Collectors.toList());
+                .map(this::from)
+                .toList();
         return Sort.by(orders);
     }
 
-    private Sort.Order fromDto(SortDto.Order dto) {
-        var direction = fromDto(dto.getDirection());
-        return Sort.Order.of(dto.getProperty(), direction);
+    private Sort.Order from(SortDto.Order dto) {
+        var direction = from(dto.direction());
+        return new Sort.Order(dto.property(), direction);
     }
 
-    private Sort.Direction fromDto(SortDto.Direction dto) {
+    private Sort.Direction from(SortDto.Direction dto) {
         return SortDto.Direction.ASC == dto
                 ? Sort.Direction.ASC
                 : Sort.Direction.DESC;
     }
 
-    public <T, U> PageDto<U> toDto(Page<T> page, Function<T, U> mapping) {
-        var paging = toDto(page.getPaging());
-        var elements = page.getElements()
+    public <T, U> PageDto<U> to(Page<T> page, Function<T, U> mapping) {
+        var paging = to(page.paging());
+        var elements = page.elements()
                 .stream()
                 .map(mapping)
-                .collect(Collectors.toList());
-        var sort = page.getSort()
-                .map(this::toDto)
-                .orElse(null);
+                .toList();
+        var sort = to(page.sort());
         return new PageDto<>(paging, elements, sort);
     }
 
-    private PagingDto toDto(Paging paging) {
+    private PagingDto to(Paging paging) {
         return PagingDto.builder()
-                .number(paging.getNumber())
-                .size(paging.getSize())
-                .totalElements(paging.getTotalElements())
-                .totalPages(paging.getTotalPages())
+                .number(paging.number())
+                .size(paging.size())
+                .totalElements(paging.totalElements())
+                .totalPages(paging.totalPages())
                 .build();
     }
 
-    private SortDto toDto(Sort sort) {
-        var orders = sort.getOrders()
+    private SortDto to(Sort sort) {
+        var orders = sort.orders()
                 .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+                .map(this::to)
+                .toList();
         return SortDto.builder()
                 .orders(orders)
                 .build();
     }
 
-    private SortDto.Order toDto(Sort.Order order) {
-        var direction = toDto(order.getDirection());
-        return SortDto.Order.builder()
-                .property(order.getProperty())
-                .direction(direction)
-                .build();
+    private SortDto.Order to(Sort.Order order) {
+        var direction = to(order.direction());
+        return new SortDto.Order(order.property(), direction);
     }
 
-    private SortDto.Direction toDto(Sort.Direction direction) {
+    private SortDto.Direction to(Sort.Direction direction) {
         if (Sort.Direction.ASC == direction) {
             return SortDto.Direction.ASC;
         } else {

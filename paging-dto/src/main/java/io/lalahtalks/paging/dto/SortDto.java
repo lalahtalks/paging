@@ -1,30 +1,11 @@
 package io.lalahtalks.paging.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Singular;
-import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Value
-@Builder
-public class SortDto {
-
-    @Value
-    @Builder
-    public static class Order {
-
-        @JsonProperty("property")
-        @NonNull
-        String property;
-
-        @JsonProperty("direction")
-        @NonNull
-        SortDto.Direction direction;
-
-    }
+public record SortDto(@JsonProperty("orders") List<Order> orders) {
 
     public enum Direction {
 
@@ -33,9 +14,39 @@ public class SortDto {
 
     }
 
-    @JsonProperty("orders")
-    @NonNull
-    @Singular
-    List<Order> orders;
+    public record Order(
+            @JsonProperty("property") String property,
+            @JsonProperty("direction") SortDto.Direction direction) {
+
+    }
+
+    public static final class Builder {
+
+        private List<Order> orders = new ArrayList<>();
+
+        public Builder clearOrders() {
+            this.orders = new ArrayList<>();
+            return this;
+        }
+
+        public Builder orders(List<Order> orders) {
+            this.orders.addAll(orders);
+            return this;
+        }
+
+        public Builder order(Order order) {
+            this.orders.add(order);
+            return this;
+        }
+
+        public SortDto build() {
+            return new SortDto(orders);
+        }
+
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
 }

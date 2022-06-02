@@ -14,22 +14,22 @@ class PageTest {
             .build();
 
     @Test
-    void getSort_returns_empty_when_sort_is_null() {
+    void getSort_returns_empty_when_sort_is_empty() {
         var page = Page.<String>builder()
                 .paging(PAGING)
                 .element("test")
                 .build();
-        assertThat(page.getSort()).isEmpty();
+        assertThat(page.sort()).isEqualTo(Sort.EMPTY);
     }
 
     @Test
-    void getSort_returns_value_when_sort_is_not_null() {
+    void getSort_returns_value_when_sort_is_not_empty() {
         var page = Page.<String>builder()
                 .paging(PAGING)
                 .element("test")
                 .sort(Sort.by(Sort.Order.asc("property")))
                 .build();
-        assertThat(page.getSort()).hasValue(Sort.by(Sort.Order.asc("property")));
+        assertThat(page.sort()).isEqualTo(Sort.by(Sort.Order.asc("property")));
     }
 
 }

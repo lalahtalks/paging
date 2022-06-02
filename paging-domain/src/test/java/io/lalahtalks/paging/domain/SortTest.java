@@ -17,13 +17,13 @@ class SortTest {
         @Test
         void by_orders_list_works() {
             var actual = Sort.by(List.of(Sort.Order.asc("property")));
-            assertThat(actual.getOrders()).containsExactly(Sort.Order.asc("property"));
+            assertThat(actual.orders()).containsExactly(Sort.Order.asc("property"));
         }
 
         @Test
         void by_orders_varargs_works() {
             var actual = Sort.by(Sort.Order.asc("property"));
-            assertThat(actual.getOrders()).containsExactly(Sort.Order.asc("property"));
+            assertThat(actual.orders()).containsExactly(Sort.Order.asc("property"));
         }
 
         @Test
@@ -41,15 +41,15 @@ class SortTest {
         @Test
         void asc_works() {
             var actual = Sort.Order.asc("property");
-            assertThat(actual.getProperty()).isEqualTo("property");
-            assertThat(actual.getDirection()).isEqualTo(Sort.Direction.ASC);
+            assertThat(actual.property()).isEqualTo("property");
+            assertThat(actual.direction()).isEqualTo(Sort.Direction.ASC);
         }
 
         @Test
         void desc_works() {
             var actual = Sort.Order.desc("property");
-            assertThat(actual.getProperty()).isEqualTo("property");
-            assertThat(actual.getDirection()).isEqualTo(Sort.Direction.DESC);
+            assertThat(actual.property()).isEqualTo("property");
+            assertThat(actual.direction()).isEqualTo(Sort.Direction.DESC);
         }
 
         @Test

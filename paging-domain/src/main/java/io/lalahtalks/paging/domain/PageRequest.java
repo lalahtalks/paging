@@ -1,19 +1,15 @@
 package io.lalahtalks.paging.domain;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-@Value
-@Builder(toBuilder = true)
-public class PageRequest {
+public record PageRequest(
+        Integer pageNumber,
+        Integer pageSize,
+        Sort sort) {
 
     public static PageRequest of(int number, int page) {
-        return new PageRequest(number, page, null);
+        return new PageRequest(number, page, Sort.EMPTY);
     }
 
     public static PageRequest of(int number, int page, List<Sort.Order> sortOrders) {
@@ -26,22 +22,12 @@ public class PageRequest {
         return of(number, page, asList);
     }
 
-    @NonNull Integer pageNumber;
-    @NonNull Integer pageSize;
-    Sort sort;
-
-    public Optional<Sort> getSort() {
-        return Optional.ofNullable(sort);
-    }
-
     public PageRequest withDefaultSort(Sort defaultSort) {
-        if (null != sort) {
+        if (!sort.isEmpty()) {
             return this;
         }
 
-        return toBuilder()
-                .sort(defaultSort)
-                .build();
+        return new PageRequest(pageNumber, pageSize, defaultSort);
     }
 
 }

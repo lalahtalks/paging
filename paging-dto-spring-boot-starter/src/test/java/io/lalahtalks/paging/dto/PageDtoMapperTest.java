@@ -40,33 +40,18 @@ class PageDtoMapperTest {
             .build();
 
     private static final SortDto SORT_DTO = SortDto.builder()
-            .order(SortDto.Order.builder()
-                    .property("name")
-                    .direction(SortDto.Direction.ASC)
-                    .build())
-
-            .order(SortDto.Order.builder()
-                    .property("timestamp")
-                    .direction(SortDto.Direction.DESC)
-                    .build())
+            .order(new SortDto.Order("name", SortDto.Direction.ASC))
+            .order(new SortDto.Order("timestamp", SortDto.Direction.DESC))
             .build();
 
     public static final PageDto<String> PAGE_1_DTO = new PageDto<>(PAGING_DTO, List.of("0"), SORT_DTO);
 
-    public static final PageDto<String> PAGE_2_DTO = new PageDto<>(PAGING_DTO, List.of("0"), null);
-
     private final PageDtoMapper pageDtoMapper = new PageDtoMapper();
 
     @Test
-    void toDto_works_when_sort_is_not_null() {
-        var actual = pageDtoMapper.toDto(PAGE_1, IDENTITY);
+    void toDto_works() {
+        var actual = pageDtoMapper.to(PAGE_1, IDENTITY);
         assertThat(actual).isEqualTo(PAGE_1_DTO);
-    }
-
-    @Test
-    void toDto_works_when_sort_is_null() {
-        var actual = pageDtoMapper.toDto(PAGE_2, IDENTITY);
-        assertThat(actual).isEqualTo(PAGE_2_DTO);
     }
 
 }

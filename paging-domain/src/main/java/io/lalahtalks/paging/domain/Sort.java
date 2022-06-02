@@ -1,40 +1,28 @@
 package io.lalahtalks.paging.domain;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Singular;
-import lombok.Value;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Value
-public class Sort {
+public record Sort(List<Order> orders) {
 
-    public static Sort by(List<Order> orders) {
-        return new Sort(orders);
+    public static final Sort EMPTY = new Sort(List.of());
+
+    public enum Direction {
+
+        ASC, DESC
+
     }
 
-    public static Sort by(Order... orders) {
-        var asList = Arrays.asList(orders);
-        return new Sort(asList);
-    }
-
-    @Value
-    @RequiredArgsConstructor(staticName = "of")
-    public static class Order {
+    public record Order(String property, Direction direction) {
 
         public static Order asc(String property) {
-            return Order.of(property, Direction.ASC);
+            return new Order(property, Direction.ASC);
         }
 
         public static Order desc(String property) {
-            return Order.of(property, Direction.DESC);
+            return new Order(property, Direction.DESC);
         }
-
-        @NonNull String property;
-        @NonNull Direction direction;
 
         public boolean isAscending() {
             return Direction.ASC == direction;
@@ -46,15 +34,18 @@ public class Sort {
 
     }
 
-    public enum Direction {
-
-        ASC, DESC
-
+    public static Sort by(List<Order> orders) {
+        return new Sort(orders);
     }
 
-    @NonNull
-    @Singular
-    List<Order> orders;
+    public static Sort by(Order... orders) {
+        var asList = Arrays.asList(orders);
+        return new Sort(asList);
+    }
+
+    public boolean isEmpty() {
+        return equals(Sort.EMPTY);
+    }
 
     public Stream<Order> stream() {
         return orders.stream();

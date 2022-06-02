@@ -1,28 +1,52 @@
 package io.lalahtalks.paging.domain;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Singular;
-import lombok.Value;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@Value
-@Builder
-public class Page<T> {
+public record Page<T>(
+        Paging paging,
+        List<T> elements,
+        Sort sort) {
 
-    @NonNull
-    Paging paging;
+    public static final class Builder<T> {
 
-    @NonNull
-    @Singular
-    List<T> elements;
+        private Paging paging;
+        private List<T> elements = new ArrayList<>();
+        private Sort sort = Sort.EMPTY;
 
-    Sort sort;
+        public Builder<T> paging(Paging paging) {
+            this.paging = paging;
+            return this;
+        }
 
-    public Optional<Sort> getSort() {
-        return Optional.ofNullable(sort);
+        public Builder<T> clearElements() {
+            this.elements = new ArrayList<>();
+            return this;
+        }
+
+        public Builder<T> elements(List<T> elements) {
+            this.elements.addAll(elements);
+            return this;
+        }
+
+        public Builder<T> element(T element) {
+            this.elements.add(element);
+            return this;
+        }
+
+        public Builder<T> sort(Sort sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public Page<T> build() {
+            return new Page<>(paging, elements, sort);
+        }
+
+    }
+
+    public static <T> Builder<T> builder() {
+        return new Builder<>();
     }
 
 }
