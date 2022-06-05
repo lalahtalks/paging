@@ -21,6 +21,10 @@ public class PageDto<T> {
         this.sort = sort;
     }
 
+    public PageDto(PagingDto paging, List<T> elements) {
+        this(paging, elements, SortDto.EMPTY);
+    }
+
     public final PagingDto paging() {
         return paging;
     }

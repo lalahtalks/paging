@@ -6,6 +6,8 @@ import java.util.List;
 
 public record SortDto(@JsonProperty("orders") List<Order> orders) {
 
+    public static final SortDto EMPTY = new SortDto(List.of());
+
     public enum Direction {
 
         ASC,
