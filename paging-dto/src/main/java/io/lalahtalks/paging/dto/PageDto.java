@@ -2,53 +2,45 @@ package io.lalahtalks.paging.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public record PageDto<T>(
-        @JsonProperty("paging") PagingDto paging,
-        @JsonProperty("elements") List<T> elements,
-        @JsonProperty("sort") SortDto sort) {
+public class PageDto<T> {
 
-    public static final class Builder<T> {
+    @JsonProperty("paging")
+    protected final PagingDto paging;
 
-        private PagingDto paging;
-        private List<T> elements = new ArrayList<>();
-        private SortDto sort;
+    @JsonProperty("elements")
+    protected final List<T> elements;
 
-        public Builder<T> paging(PagingDto paging) {
-            this.paging = paging;
-            return this;
-        }
+    @JsonProperty("sort")
+    protected final SortDto sort;
 
-        public Builder<T> clearElements() {
-            this.elements = new ArrayList<>();
-            return this;
-        }
-
-        public Builder<T> elements(List<T> elements) {
-            this.elements.addAll(elements);
-            return this;
-        }
-
-        public Builder<T> element(T element) {
-            this.elements.add(element);
-            return this;
-        }
-
-        public Builder<T> sort(SortDto sort) {
-            this.sort = sort;
-            return this;
-        }
-
-        public PageDto<T> build() {
-            return new PageDto<>(paging, elements, sort);
-        }
-
+    public PageDto(PagingDto paging, List<T> elements, SortDto sort) {
+        this.paging = paging;
+        this.elements = List.copyOf(elements);
+        this.sort = sort;
     }
 
-    public static <T> Builder<T> builder() {
-        return new Builder<>();
+    public final PagingDto paging() {
+        return paging;
+    }
+
+    public final List<T> elements() {
+        return elements;
+    }
+
+    public final SortDto sort() {
+        return sort;
+    }
+
+    @Override
+    public final String toString() {
+        return getClass().getSimpleName()
+                + "{"
+                + "paging=" + paging
+                + ", elements=" + elements
+                + ", sort=" + sort
+                + '}';
     }
 
 }

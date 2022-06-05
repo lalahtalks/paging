@@ -63,12 +63,11 @@ public class PageDtoMapper {
     }
 
     private PagingDto to(Paging paging) {
-        return PagingDto.builder()
-                .number(paging.number())
-                .size(paging.size())
-                .totalElements(paging.totalElements())
-                .totalPages(paging.totalPages())
-                .build();
+        return new PagingDto(
+                paging.number(),
+                paging.size(),
+                paging.totalElements(),
+                paging.totalPages());
     }
 
     private SortDto to(Sort sort) {
@@ -76,9 +75,7 @@ public class PageDtoMapper {
                 .stream()
                 .map(this::to)
                 .toList();
-        return SortDto.builder()
-                .orders(orders)
-                .build();
+        return new SortDto(orders);
     }
 
     private SortDto.Order to(Sort.Order order) {
