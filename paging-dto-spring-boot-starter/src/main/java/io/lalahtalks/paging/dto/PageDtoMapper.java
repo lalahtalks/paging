@@ -17,20 +17,15 @@ public class PageDtoMapper {
                 .map(mapping)
                 .toList();
         var sort = from(dto.sort());
-        return Page.<T>builder()
-                .paging(paging)
-                .elements(elements)
-                .sort(sort)
-                .build();
+        return new Page<>(paging, elements, sort);
     }
 
     private Paging from(PagingDto dto) {
-        return Paging.builder()
-                .number(dto.number())
-                .size(dto.size())
-                .totalElements(dto.totalElements())
-                .totalPages(dto.totalPages())
-                .build();
+        return new Paging(
+                dto.number(),
+                dto.size(),
+                dto.totalElements(),
+                dto.totalPages());
     }
 
     private Sort from(SortDto dto) {
@@ -42,8 +37,9 @@ public class PageDtoMapper {
     }
 
     private Sort.Order from(SortDto.Order dto) {
+        var property = new Sort.Property(dto.property());
         var direction = from(dto.direction());
-        return new Sort.Order(dto.property(), direction);
+        return new Sort.Order(property, direction);
     }
 
     private Sort.Direction from(SortDto.Direction dto) {
@@ -80,7 +76,7 @@ public class PageDtoMapper {
 
     private SortDto.Order to(Sort.Order order) {
         var direction = to(order.direction());
-        return new SortDto.Order(order.property(), direction);
+        return new SortDto.Order(order.property().value(), direction);
     }
 
     private SortDto.Direction to(Sort.Direction direction) {

@@ -14,23 +14,12 @@ class PageDtoMapperTest {
 
     private static final Function<String, String> IDENTITY = Function.identity();
 
-    private static final Paging PAGING = Paging.builder()
-            .number(0)
-            .size(1)
-            .totalElements(1L)
-            .totalPages(1)
-            .build();
+    private static final Paging PAGING = new Paging(0, 1, 1L, 1);
 
-    private static final Page<String> PAGE_1 = Page.<String>builder()
-            .paging(PAGING)
-            .element("0")
-            .sort(Sort.by(Sort.Order.asc("name"), Sort.Order.desc("timestamp")))
-            .build();
-
-    public static final Page<String> PAGE_2 = Page.<String>builder()
-            .paging(PAGING)
-            .element("0")
-            .build();
+    private static final Page<String> PAGE_1 = new Page<>(
+            PAGING,
+            List.of("0"),
+            Sort.by(Sort.Order.asc(new Sort.Property("name")), Sort.Order.desc(new Sort.Property("timestamp"))));
 
     private static final PagingDto PAGING_DTO = new PagingDto(0, 1, 1L, 1);
 

@@ -6,21 +6,19 @@ import java.util.stream.Stream;
 
 public record Sort(List<Order> orders) {
 
-    public static final Sort EMPTY = new Sort(List.of());
-
     public enum Direction {
 
         ASC, DESC
 
     }
 
-    public record Order(String property, Direction direction) {
+    public record Order(Property property, Direction direction) {
 
-        public static Order asc(String property) {
+        public static Order asc(Property property) {
             return new Order(property, Direction.ASC);
         }
 
-        public static Order desc(String property) {
+        public static Order desc(Property property) {
             return new Order(property, Direction.DESC);
         }
 
@@ -34,6 +32,12 @@ public record Sort(List<Order> orders) {
 
     }
 
+    public record Property(String value) {
+
+    }
+
+    public static final Sort EMPTY = new Sort(List.of());
+
     public static Sort by(List<Order> orders) {
         return new Sort(orders);
     }
@@ -43,8 +47,12 @@ public record Sort(List<Order> orders) {
         return new Sort(asList);
     }
 
+    public Sort(List<Order> orders) {
+        this.orders = List.copyOf(orders);
+    }
+
     public boolean isEmpty() {
-        return equals(Sort.EMPTY);
+        return orders.isEmpty();
     }
 
     public Stream<Order> stream() {
